@@ -32,6 +32,7 @@ def chr_weight(chr:list()):
 class Pop():
     def __init__(self,num_pop,generations,weight_max) -> None:
         self.individuals=list()
+        self.fitness=list(10)
         self.num_pop=num_pop
         self.generations=generations
         self.weight_max=weight_max
@@ -69,6 +70,14 @@ class Pop():
             _,_,_,mmin,mmax=dict_names[i]
             self.min.append(mmin)
             self.max.append(mmax)
+            
+    def rulette():#Metodo de ruleta
+        prob=rd.random()
+        
+        
+        
+    def genetic_operator():#Operador para reproducir una nueva generacion
+        s=''
                 
   
             
