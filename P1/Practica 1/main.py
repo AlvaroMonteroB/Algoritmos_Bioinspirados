@@ -3,13 +3,13 @@ P=.80#Probabilidad
 
 
 dict_names={#Name, weight, price, minimum,max
-    0:("Decoy Detonators",4,10,0,5),
+    0:("Decoy Detonators",4,10,0,10),
     1:("Love potion",4,8,3,5),
-    2:("Extendable Ears",5,12,0,5),
-    3:("Skiving Snackbox",5,6,2,5),
+    2:("Extendable Ears",5,12,0,10),
+    3:("Skiving Snackbox",5,6,2,10),
     4:("Fever Fudge",2,3,0,10),
-    5:("Puking Pastilles",1.5,2,0,5),
-    6:("Nosebleed Nougat",1,2,0,5)
+    5:("Puking Pastilles",1.5,2,0,10),
+    6:("Nosebleed Nougat",1,2,0,10)
 }
 
 
@@ -58,15 +58,13 @@ class Pop():
                 if gen_capacity<=self.weight_max:#Si es menor o igual al maximo hacemos el append del cromosoma
                     #print(str(len(self.individuals))+ " numero de cromosomas")
                     self.individuals.append(aux_chromosome)
-                    print("self.individuals[0]= "+str(len(self.individuals[0]))+" si es "+str(len(aux_chromosome)))
                 #En cualquier caso vamos a limpiar el cromosoma auxiliar para reescribirlo       
                 
                 
-        if self.individuals:
-            print("Si hay "+str(len(self.individuals[0])))
         for cr in self.individuals:#cromosomas
-            for gen in cr:#Genes en cromosomas
-                       print(gen.name+" "+str(gen.quantity))
+            print(" peso "+str(chr_weight(cr)))
+
+            
         for i in range(7):
             _,_,_,mmin,mmax=dict_names[i]
             self.min.append(mmin)
