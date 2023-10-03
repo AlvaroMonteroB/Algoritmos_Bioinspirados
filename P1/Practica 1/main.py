@@ -1,4 +1,5 @@
 import random as rd
+from copy import deepcopy
 P=.80#Probabilidad
 
 
@@ -32,7 +33,7 @@ def chr_weight(chr:list()):
 class Pop():
     def __init__(self,num_pop,generations,weight_max) -> None:
         self.individuals=list()
-        self.fitness=list(10)
+        self.fitness=list()
         self.num_pop=num_pop
         self.generations=generations
         self.weight_max=weight_max
@@ -71,20 +72,50 @@ class Pop():
             self.min.append(mmin)
             self.max.append(mmax)
             
-    def rulette():#Metodo de ruleta
+    def rulette(self):#Metodo de ruleta
         prob=rd.random()
+        fitness=list()        
+        for chrom in self.individuals:
+            aux=0
+            for gen in chrom:
+                aux+=(gen.price * gen.quantity)
+            aux=aux/chr_weight(chrom)
+            fitness.append(deepcopy(aux))#Funcion de fitness
+        total=sum(fitness)
+        separated_prob=[]
+        for vals in fitness:#Crear probabilidad para cada cromosoma
+            separated_prob.append(vals/total)
+        temp=0
+        acumulated_prob=[]
+        for val in separated_prob:#Crear probabilidad acumulada
+            acumulated_prob.append(val+temp)
+            temp=acumulated_prob[-1]
+        for i in range(len(acumulated_prob)):
+            if prob<=acumulated_prob[i]:
+                return i
+        return
+        
+            
+                
+                
+                
         
         
         
-    def genetic_operator():#Operador para reproducir una nueva generacion
-        s=''
+    def genetic_operator(self):#Operador para reproducir una nueva generacion
+        
+        for i in range(1):#Generaciones de nuestro algoritmo
+            print(str(self.rulette())+" "+str(self.rulette()))
+            
+            
                 
   
             
                 
 
 Poblacion=Pop(10,50,30)
-Poblacion.pop_init()         
+Poblacion.pop_init()   
+Poblacion.genetic_operator()
             
             
             
