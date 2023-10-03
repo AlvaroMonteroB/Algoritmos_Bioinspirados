@@ -105,6 +105,7 @@ class Pop():
     def genetic_operator(self):#Operador para reproducir una nueva generacion
         
         for i in range(1):#Generaciones de nuestro algoritmo
+            new_generation=[]
             print(str(self.rulette())+" "+str(self.rulette()))
             
             
