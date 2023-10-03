@@ -42,9 +42,9 @@ class Pop():
         min,max=0,0
         for g in range(self.num_pop):#For para generar individuos
             gen_capacity=31
-            aux_chromosome=list()
+            
             while gen_capacity>self.weight_max:#Si la capacidad es mas de 30 repetimos 
-                
+                aux_chromosome=list()
                 for i in range(7):
                     name,weight,price,min_val,max_val=dict_names[i]
                     quantity=rd.randint(min_val,max_val)
@@ -56,17 +56,24 @@ class Pop():
                 #print(str(gen_capacity)+"\n")
                 
                 if gen_capacity<=self.weight_max:#Si es menor o igual al maximo hacemos el append del cromosoma
-                        self.individuals.append(aux_chromosome)
-                        print(str(len(self.individuals))+ " numero de cromosomas"+" Numero de genes "+str(len(aux_chromosome)))
+                    #print(str(len(self.individuals))+ " numero de cromosomas")
+                    self.individuals.append(aux_chromosome)
+                    print("self.individuals[0]= "+str(len(self.individuals[0]))+" si es "+str(len(aux_chromosome)))
                 #En cualquier caso vamos a limpiar el cromosoma auxiliar para reescribirlo       
-                aux_chromosome.clear()
+                
+                
+        if self.individuals:
+            print("Si hay "+str(len(self.individuals[0])))
+        for cr in self.individuals:#cromosomas
+            for gen in cr:#Genes en cromosomas
+                       print(gen.name+" "+str(gen.quantity))
         for i in range(7):
             _,_,_,mmin,mmax=dict_names[i]
             self.min.append(mmin)
             self.max.append(mmax)
                 
   
-            #print("\n")
+            
                 
 
 Poblacion=Pop(10,50,30)
