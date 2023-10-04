@@ -119,6 +119,7 @@ class Pop():
         sin_mejora=0
         
         for i in range(self.generations):#Generaciones de nuestro algoritmo
+            print("Generacion "+str(i))
             new_generation=[]
             for j in range(int((len(self.individuals))/2)):#Crear 5 parejas
                 while True:
@@ -155,7 +156,7 @@ class Pop():
                         prospectos=list()    
                         if chr_weight(aux_chr)>self.weight_max:#SI no se cumple la condicion de peso se vuelve a generar
                             continue#SI no cumple volvemos a generar
-                        else:#si cumple vamos a ponerlo en los hijos
+                        elif 0<chr_weight(aux_chr)<=self.weight_max :#si cumple vamos a ponerlo en los hijos
                             prospectos.append(deepcopy(aux_chr))
                             cont+=1
                         if cont==2:#SI ya se generaron los 2 hijos continuamos
