@@ -72,7 +72,7 @@ class Pop():
             self.min.append(mmin)
             self.max.append(mmax)
             
-    def rulette(self):#Metodo de ruleta
+    def roulette(self):#Metodo de ruleta
         prob=rd.random()
         fitness=list()        
         for chrom in self.individuals:
@@ -106,7 +106,13 @@ class Pop():
         
         for i in range(1):#Generaciones de nuestro algoritmo
             new_generation=[]
-            print(str(self.rulette())+" "+str(self.rulette()))
+            for j in range(len(self.individuals)):
+                pair1=self.roulette()
+                pair2=self.roulette()
+                while pair1==pair2:
+                    pair2=self.roulette()
+                parent1=self.individuals[pair1]
+                parent2=self.individuals[pair2]
             
             
                 
