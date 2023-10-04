@@ -107,12 +107,15 @@ class Pop():
         for i in range(1):#Generaciones de nuestro algoritmo
             new_generation=[]
             for j in range(len(self.individuals)):
-                pair1=self.roulette()
-                pair2=self.roulette()
-                while pair1==pair2:
+                while True:
+                    pair1=self.roulette()
                     pair2=self.roulette()
-                parent1=self.individuals[pair1]
-                parent2=self.individuals[pair2]
+                    while pair1==pair2:#Si los indices son iguales vamos a aplicar la ruleta hasta que cambien
+                        pair2=self.roulette()
+                    parent1=self.individuals[pair1]
+                    parent2=self.individuals[pair2]
+                    if rd.random()>.85:
+                        continue
             
             
                 
