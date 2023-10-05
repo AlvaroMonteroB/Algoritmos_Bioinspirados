@@ -32,12 +32,13 @@ def chr_weight(chr:list()):
            
         
 class Pop():
-    def __init__(self,num_pop,generations,weight_max) -> None:
+    def __init__(self,num_pop,generations,weight_max,genes) -> None:
         self.individuals=list()
         self.fitness=list()
         self.num_pop=num_pop
         self.generations=generations
         self.weight_max=weight_max
+        self.genes=genes
         
     def pop_init(self):
         self.min=list()
@@ -62,13 +63,8 @@ class Pop():
                     #print(str(len(self.individuals))+ " numero de cromosomas")
                     self.individuals.append(aux_chromosome)
                 #En cualquier caso vamos a limpiar el cromosoma auxiliar para reescribirlo       
-                
-                
-        #for cr in self.individuals:#cromosomas
-         #   print(" peso "+str(chr_weight(cr)))
-
-            
-        for i in range(7):
+                 
+        for i in range(self.genes):
             _,_,_,mmin,mmax=dict_names[i]
             self.min.append(mmin)
             self.max.append(mmax)
@@ -138,9 +134,10 @@ class Pop():
                     
                     #cruza
                     cont=0
+                    prospectos=list() 
                     while True:
                         
-                        for k in range(len(self.individuals[0])):#Generar hijo
+                        for k in range(self.genes):#Generar hijo
                             aux_chr=[]#Cromosoma auxiliar
                             if rd.random()>=.5:#Si es mayor a .5 elegimos padre 2
                                 aux_chr.append(deepcopy(parent2[k]))
@@ -148,12 +145,11 @@ class Pop():
                                 aux_chr.append(deepcopy(parent1[k]))
                                 
                             #Mutacion    
-                            for mut in range(len(aux_chr)):
-                                if rd.random()<.1:#Si es menor a .1 mutamos
-                                    aux_chr[mut].quantity=rd.randint(self.min[mut],self.max[mut])
+                        for mut in range(len(aux_chr)):
+                            if rd.random()<.1:#Si es menor a .1 mutamos
+                                aux_chr[mut].quantity=rd.randint(self.min[mut],self.max[mut])
                                         
-                           #Checar condicion de peso 
-                        prospectos=list()    
+                           #Checar condicion de peso    
                         if chr_weight(aux_chr)>self.weight_max:#SI no se cumple la condicion de peso se vuelve a generar
                             continue#SI no cumple volvemos a generar
                         elif 0<chr_weight(aux_chr)<=self.weight_max :#si cumple vamos a ponerlo en los hijos
@@ -166,17 +162,17 @@ class Pop():
                     prospectos.append(parent2)
                     
 
-                fitness_rank=[]#Vamos a rankear los mejores individuos
-                for f in prospectos:
-                    weight_aux=chr_weight(f)
-                    aux=0
-                    for g in f:#Iterar en genes para sacar el fintess
-                        aux+=g.price*g.quantity
-                    fitness_rank.append((aux/weight_aux,f)) #Hacemos el fitness y el cromosoma
+                    fitness_rank=[]#Vamos a rankear los mejores individuos
+                    for f in prospectos:
+                        weight_aux=chr_weight(f)
+                        aux=0
+                        for g in f:#Iterar en genes para sacar el fintess
+                            aux+=g.price*g.quantity
+                        fitness_rank.append((aux/weight_aux,f)) #Hacemos el fitness y el cromosoma
             
                 fitness_sorted=sorted(fitness_rank,key=lambda x:x[0],reverse=True)#Sorteamos la lista de mayor a menor
-                new_generation.append(deepcopy(fitness_sorted[0][0]))#Pasan los 2 mejores individuos
-                new_generation.append(deepcopy(fitness_sorted[1][0]))
+                new_generation.append(deepcopy(fitness_sorted[0][1]))#Pasan los 2 mejores individuos
+                new_generation.append(deepcopy(fitness_sorted[1][1]))
 
             self.individuals=new_generation.copy()#Formamos la nueva generacion 
                        
@@ -187,7 +183,7 @@ class Pop():
             
                 
 
-Poblacion=Pop(10,10,30)
+Poblacion=Pop(10,10,30,7)
 Poblacion.pop_init()   
 Poblacion.genetic_operator()
 best=Poblacion.best_individual()
