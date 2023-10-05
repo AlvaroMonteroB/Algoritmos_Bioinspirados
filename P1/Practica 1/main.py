@@ -5,7 +5,7 @@ P=.80#Probabilidad
 
 dict_names={#Name, weight, price, minimum,max
     0:("Decoy Detonators",4,10,0,10),
-    1:("Love potion",4,8,3,5),
+    1:("Love potion",2,8,3,5),
     2:("Extendable Ears",5,12,0,10),
     3:("Skiving Snackbox",5,6,2,10),
     4:("Fever Fudge",2,3,0,10),
@@ -197,7 +197,7 @@ val=0
 for gen in chrom:
     print(gen.name + " "+str(gen.quantity))
     val+=gen.price
-    
+print("Con peso de "+str(chr_weight(chrom)))    
 print("COn ganancia de "+ str(val))
     
     
