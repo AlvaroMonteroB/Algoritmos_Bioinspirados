@@ -99,7 +99,7 @@ class Pop():
         for chr in self.individuals:
             fitness=0
             for gen in chr:
-                fitness+=chr.quantity*chr.price
+                fitness+=gen.quantity*gen.price
             fitness=fitness/chr_weight(chr)
             indiv.append((fitness,chr))
         
@@ -125,11 +125,14 @@ class Pop():
                         pair2=self.roulette()
                     parent1=self.individuals[pair1]
                     parent2=self.individuals[pair2]
+                    band=0
                     if rd.random()>.85:#Si el valor supera .85 no se cruzan
                         new_generation.append(deepcopy(parent1)) #se pasan a la siguiente generacion
                         new_generation.append(deepcopy(parent2))
+                        band=1
                         break
-                  
+                    if band==1:
+                        break
                     #hacer cruza, mutacion y escoger los mejores individuos
                     
                     #cruza
@@ -163,13 +166,14 @@ class Pop():
                     
 
                     fitness_rank=[]#Vamos a rankear los mejores individuos
-                    for f in prospectos:
+                    for f in prospectos:#f es cada cromosoma
                         weight_aux=chr_weight(f)
                         aux=0
                         for g in f:#Iterar en genes para sacar el fintess
                             aux+=g.price*g.quantity
                         fitness_rank.append((aux/weight_aux,f)) #Hacemos el fitness y el cromosoma
-            
+                if band==1:
+                    continue
                 fitness_sorted=sorted(fitness_rank,key=lambda x:x[0],reverse=True)#Sorteamos la lista de mayor a menor
                 new_generation.append(deepcopy(fitness_sorted[0][1]))#Pasan los 2 mejores individuos
                 new_generation.append(deepcopy(fitness_sorted[1][1]))
@@ -183,15 +187,19 @@ class Pop():
             
                 
 
-Poblacion=Pop(10,10,30,7)
+Poblacion=Pop(10,50,30,7)
 Poblacion.pop_init()   
 Poblacion.genetic_operator()
 best=Poblacion.best_individual()
 val=0
-for gen in best:
-    print(gen.name+" "+str(gen.quantity))
+_,chrom=best
+val=0
+for gen in chrom:
+    print(gen.name + " "+str(gen.quantity))
     val+=gen.price
-print("Con precio de "+str(val))
+    
+print("COn ganancia de "+ str(val))
+    
     
             
             
