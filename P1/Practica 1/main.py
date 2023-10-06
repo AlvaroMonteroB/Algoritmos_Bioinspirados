@@ -20,6 +20,8 @@ class Gen:
         self.price=price
         self.weight=weight
         self.quantity=quantity
+        
+        
     
         
         
@@ -39,6 +41,7 @@ class Pop():
         self.generations=generations
         self.weight_max=weight_max
         self.genes=genes
+        self.best_chrom=tuple#Mejor cromosoma
         
     def pop_init(self):
         self.min=list()
@@ -68,6 +71,7 @@ class Pop():
             _,_,_,mmin,mmax=dict_names[i]
             self.min.append(mmin)
             self.max.append(mmax)
+        self.best_chrom=self.best_individual()
             
     def roulette(self):#Metodo de ruleta
         prob=rd.random()
@@ -76,7 +80,6 @@ class Pop():
             aux=0
             for gen in chrom:
                 aux+=(gen.price * gen.quantity)
-            aux=aux/chr_weight(chrom)
             fitness.append(deepcopy(aux))#Funcion de fitness
         total=sum(fitness)
         separated_prob=[]
@@ -100,7 +103,6 @@ class Pop():
             fitness=0
             for gen in chr:
                 fitness+=gen.quantity*gen.price
-            fitness=fitness/chr_weight(chr)
             indiv.append((fitness,chr))
         
         sorted_list=sorted(indiv,key=lambda x:x[0],reverse=True)
@@ -171,7 +173,7 @@ class Pop():
                         aux=0
                         for g in f:#Iterar en genes para sacar el fintess
                             aux+=g.price*g.quantity
-                        fitness_rank.append((aux/weight_aux,f)) #Hacemos el fitness y el cromosoma
+                        fitness_rank.append((aux,f)) #Hacemos el fitness y el cromosoma
                 if band==1:
                     continue
                 fitness_sorted=sorted(fitness_rank,key=lambda x:x[0],reverse=True)#Sorteamos la lista de mayor a menor
@@ -179,6 +181,15 @@ class Pop():
                 new_generation.append(deepcopy(fitness_sorted[1][1]))
 
             self.individuals=new_generation.copy()#Formamos la nueva generacion 
+            fitness_gen,generation_best=self.best_individual()
+            if fitness_gen>self.best_chrom[0]:
+                self.best_chrom=(fitness_gen,generation_best)
+                sin_mejora=0
+            else:
+                sin_mejora+=1
+            if sin_mejora>10:
+                break
+            
                        
             
             
@@ -190,13 +201,11 @@ class Pop():
 Poblacion=Pop(10,50,30,7)
 Poblacion.pop_init()   
 Poblacion.genetic_operator()
-best=Poblacion.best_individual()
-val=0
-_,chrom=best
+_,chrom=Poblacion.best_chrom
 val=0
 for gen in chrom:
     print(gen.name + " "+str(gen.quantity))
-    val+=gen.price
+    val+=gen.price*gen.quantity
 print("Con peso de "+str(chr_weight(chrom)))    
 print("COn ganancia de "+ str(val))
     
