@@ -1,6 +1,8 @@
 import random as rd
 from copy import deepcopy
-P=.80#Probabilidad
+P=.85#Probabilidad de cruce
+
+p_mut=.7
 
 
 dict_names={#Name, weight, price, minimum,max
@@ -37,10 +39,10 @@ class Pop():
     def __init__(self,num_pop,generations,weight_max,genes) -> None:
         self.individuals=list()
         self.fitness=list()
-        self.num_pop=num_pop
-        self.generations=generations
-        self.weight_max=weight_max
-        self.genes=genes
+        self.num_pop=num_pop#Tamaño de la poblacion
+        self.generations=generations#Numero de generaciones
+        self.weight_max=weight_max#Peso maximo
+        self.genes=genes#Numero de genes por cromosoma
         self.best_chrom=tuple#Mejor cromosoma
         
     def pop_init(self):
@@ -48,14 +50,14 @@ class Pop():
         self.max=list()
         min,max=0,0
         for g in range(self.num_pop):#For para generar individuos
-            gen_capacity=31
+            gen_capacity=31#Iniciamos en este numero para que entre en el while
             
             while gen_capacity>self.weight_max:#Si la capacidad es mas de 30 repetimos 
                 aux_chromosome=list()
-                for i in range(7):
-                    name,weight,price,min_val,max_val=dict_names[i]
+                for i in range(self.genes):
+                    name,weight,price,min_val,max_val=dict_names[i]#Descomponer tupla
                     quantity=rd.randint(min_val,max_val)
-                    aux_gen=Gen(name,price,weight,quantity)
+                    aux_gen=Gen(name,price,weight,quantity)#Gen auxiliar
                     aux_chromosome.append(aux_gen)#vector de genes
                     #Calculamos el peso de los 7 genes del cromosoma
                     
@@ -65,7 +67,7 @@ class Pop():
                 if gen_capacity<=self.weight_max:#Si es menor o igual al maximo hacemos el append del cromosoma
                     #print(str(len(self.individuals))+ " numero de cromosomas")
                     self.individuals.append(aux_chromosome)
-                #En cualquier caso vamos a limpiar el cromosoma auxiliar para reescribirlo       
+                     
                  
         for i in range(self.genes):
             _,_,_,mmin,mmax=dict_names[i]
@@ -117,7 +119,7 @@ class Pop():
         sin_mejora=0
         
         for i in range(self.generations):#Generaciones de nuestro algoritmo
-            print("Generacion "+str(i))
+            #print("Generacion "+str(i))
             new_generation=[]
             for j in range(int((len(self.individuals))/2)):#Crear 5 parejas
                 while True:
@@ -128,10 +130,10 @@ class Pop():
                     parent1=self.individuals[pair1]
                     parent2=self.individuals[pair2]
                     band=0
-                    if rd.uniform(0,1)>.85:#Si el valor supera .85 no se cruzan
+                    if rd.uniform(0,1)>P:#Si el valor supera .85 no se cruzan
                         new_generation.append(deepcopy(parent1)) #se pasan a la siguiente generacion
                         new_generation.append(deepcopy(parent2))
-                        band=1
+                        band=1#Bandera de rompimiento
                         break
                     #hacer cruza, mutacion y escoger los mejores individuos
                     
@@ -141,50 +143,50 @@ class Pop():
                     while True:
                         
                         pos_hijos=[]
-                        for k in range(self.genes):#Generar hijo
+                        for k in range(self.genes):#Generar puntos de cruza
                             pos_hijos.append(rd.uniform(0,1))
 
                         for k in range(len(pos_hijos)):
-                            aux_chr1=[]
+                            aux_chr1=[]#Cromosomas auxiliares
                             aux_chr2=[]
-                            if pos_hijos[k]>=.5:#Si es mayor a .5 elegimos padre 2
+                            if pos_hijos[k]>=.5:#Intercalamos la cruza para que se genere el complemento de los hermanos
                                 aux_chr1.append(deepcopy(parent2[k]))
-                            else:
-                                aux_chr1.append(deepcopy(parent1[k]))
-                                
-                            if pos_hijos[k]>=.5:#El hermano es el complemento
                                 aux_chr2.append(deepcopy(parent1[k]))
                             else:
+                                aux_chr1.append(deepcopy(parent1[k]))
                                 aux_chr2.append(deepcopy(parent2[k]))
+                                
+
                                 
                             #Mutacion    
                         for mut in range(len(aux_chr1)):
-                            if rd.uniform(0,1)<.1:#Si es menor a .1 mutamos
+                            if rd.uniform(0,1)<=p_mut:#Si es menor a .1 mutamos
                                 aux_chr1[mut].quantity=rd.randint(self.min[mut],self.max[mut])
                         for mut in range(len(aux_chr2)):
-                            if rd.uniform(0,1)<.1:
+                            if rd.uniform(0,1)<=p_mut:
                                 aux_chr2[mut].quantity=rd.randint(self.min[mut],self.max[mut])
                                         
                            #Checar condicion de peso    
                         if chr_weight(aux_chr1)>self.weight_max and chr_weight(aux_chr2)>self.weight_max:#SI no se cumple la condicion de peso se vuelve a generar
                             continue#SI no cumple volvemos a generar
                         elif 0<chr_weight(aux_chr1)<=self.weight_max and 0<chr_weight(aux_chr2)<=self.weight_max :#si cumple vamos a ponerlo en los hijos
-                            prospectos.append(deepcopy(aux_chr1))
+                            prospectos.append(deepcopy(aux_chr1))#Cuando los hijos cumplen, los añadimos junto con los padres a los prospectos
                             prospectos.append(deepcopy(aux_chr2))
+                            prospectos.append(deepcopy(parent1))
+                            prospectos.append(deepcopy(parent2))
                             break
                         
-                    prospectos.append(parent1)
-                    prospectos.append(parent2)
+                    
                     
 
                     fitness_rank=[]#Vamos a rankear los mejores individuos
                     for f in prospectos:#f es cada cromosoma
-                        weight_aux=chr_weight(f)
                         aux=0
                         for g in f:#Iterar en genes para sacar el fintess
-                            aux+=g.price*g.quantity
+                            aux+=g.price*g.quantity#Precio por cantidad para maximizar la ganancia
                         fitness_rank.append((aux,f)) #Hacemos el fitness y el cromosoma
-                if band==1:
+                        
+                if band==1:#Si se rompió el while continuamos
                     continue
                 fitness_sorted=sorted(fitness_rank,key=lambda x:x[0],reverse=True)#Sorteamos la lista de mayor a menor
                 new_generation.append(deepcopy(fitness_sorted[0][1]))#Pasan los 2 mejores individuos
@@ -192,7 +194,7 @@ class Pop():
 
             self.individuals=new_generation.copy()#Formamos la nueva generacion 
             fitness_gen,generation_best=self.best_individual()
-            if i<2:
+            if i<2 or i>48:
                 print("Generacion "+str(i))
                 for m in self.individuals:
                     for n in m:
@@ -208,6 +210,7 @@ class Pop():
             else:
                 sin_mejora+=1
             if sin_mejora>5:
+                print("Generacion "+str(i))
                 break
             
                        
@@ -217,7 +220,7 @@ class Pop():
   
             
                 
-
+#Poblacion inicial  generaciones    peso maximo     longitud del gen
 Poblacion=Pop(10,50,30,7)
 Poblacion.pop_init()   
 Poblacion.genetic_operator()
