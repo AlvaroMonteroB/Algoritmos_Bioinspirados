@@ -119,7 +119,7 @@ class Pop():
         sin_mejora=0
         
         for i in range(self.generations):#Generaciones de nuestro algoritmo
-            #print("Generacion "+str(i))
+            print("Generacion "+str(i))
             new_generation=[]
             for j in range(int((len(self.individuals))/2)):#Crear 5 parejas
                 while True:
@@ -194,12 +194,12 @@ class Pop():
 
             self.individuals=new_generation.copy()#Formamos la nueva generacion 
             fitness_gen,generation_best=self.best_individual()
-            if i<2 or i>48:
-                print("Generacion "+str(i))
-                for m in self.individuals:
-                    for n in m:
-                        print(str(n.quantity))
-                    print("\n")
+            #if i<2 or i>48:
+             #   print("Generacion "+str(i))
+              #  for m in self.individuals:
+               #     for n in m:
+                #        print(str(n.quantity))
+                 #   print("\n")
             
             
             
@@ -210,7 +210,7 @@ class Pop():
             else:
                 sin_mejora+=1
             if sin_mejora>5:
-                print("Generacion "+str(i))
+                #print("Generacion "+str(i))
                 break
             
                        
