@@ -21,8 +21,8 @@ def update_velocity(particle, gbest, a, b1, b2):#Actualización de velocidad
 
     return new_vel
 
-def pso_global(iterations, num_particles, a, b1, b2):
-    particles = [Particle(random.uniform(-5, 5), random.uniform(-5, 5)) for _ in range(num_particles)]
+def enjambre(iterations, num_particles, a, b1, b2):
+    particles = [Particle(random.uniform(-5, 5), random.uniform(-5, 5)) for _ in range(num_particles)]#Poblacion en posiciones iniciales
     gbest = min(particles, key=lambda p: funct(*p.pos)).pos
 
     for iteration in range(iterations):
@@ -45,8 +45,8 @@ def pso_global(iterations, num_particles, a, b1, b2):
             print(f"  Posicion: {particle.pos}")
             print(f"  Velocidad: {vel}")
             print(f"  pbest: {particle.pbest}")
-            print(f"  gbest: {gbest}")
+            print(f"  gbest: {gbest}") #Mejor posición
             print()
 
-if __name__ == "__main__":
-    pso_global(iterations=50, num_particles=20, a=0.8, b1=0.7, b2=1)
+
+enjambre(iterations=50, num_particles=20, a=0.8, b1=0.7, b2=1)
