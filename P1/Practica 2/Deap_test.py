@@ -1,6 +1,3 @@
-#Montero Barraza Álvaro David
-#5BV1
-
 import operator
 import math
 import random
@@ -32,7 +29,6 @@ pset.addPrimitive(math.cos, 1)
 pset.addPrimitive(math.sin, 1)
 pset.addEphemeralConstant("rand101", partial(random.randint, -1, 1))
 pset.renameArguments(ARG0='x')
-pset.renameArguments(ARG1='y')
 
 creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
 creator.create("Individual", gp.PrimitiveTree, fitness=creator.FitnessMin)
@@ -46,15 +42,12 @@ toolbox.register("compile", gp.compile, pset=pset)
 def evalSymbReg(individual, points):
     # Transform the tree expression in a callable function
     func = toolbox.compile(expr=individual)
-    
-    def evaluate_point(point):
-        x, y = point
-        return (func(x) - x**2 - x*y - y**2 )**2
+    # Evaluate the mean squared error between the expression
+    # and the real function : x**4 + x**3 + x**2 + x
+    sqerrors = ((func(x) - x**4 - x**3 - x**2 )**2 for x in points)
+    return math.fsum(sqerrors) / len(points),
 
-    sqerrors = (evaluate_point(point) for point in points)
-    return (math.fsum(sqerrors) / len(points),)
-
-toolbox.register("evaluate", evalSymbReg, points = [(x, y) for x in range(-10, 10) for y in range(-10, 10)])
+toolbox.register("evaluate", evalSymbReg, points=[x/10. for x in range(-10,10)])
 toolbox.register("select", tools.selTournament, tournsize=3)
 toolbox.register("mate", gp.cxOnePoint)
 toolbox.register("expr_mut", gp.genFull, min_=0, max_=2)

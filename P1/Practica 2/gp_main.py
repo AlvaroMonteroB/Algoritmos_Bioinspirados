@@ -1,4 +1,5 @@
-#matplotlib inline
+#Montero Barraza Alvaro David
+#5BV1
 from gplearn.genetic import SymbolicRegressor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.tree import DecisionTreeRegressor
