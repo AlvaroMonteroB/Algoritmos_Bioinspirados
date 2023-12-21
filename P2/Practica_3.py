@@ -47,6 +47,7 @@ def enjambre(iterations, num_particles, a, b1, b2):
             print(f"  pbest: {particle.pbest}")
             print(f"  gbest: {gbest}") #Mejor posición
             print()
+    print(f"Evaluacion de la funcion {funct(particle.pos[0],particle.pos[1])}")
 
 
 enjambre(iterations=50, num_particles=20, a=0.8, b1=0.7, b2=1)

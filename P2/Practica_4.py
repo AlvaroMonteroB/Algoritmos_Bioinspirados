@@ -149,5 +149,5 @@ for i in range(cycles):
         best_bee = worker
     #print(f"best_bee"")
 
-print("---")
-print(f"Best bee found: {best_bee}")
+print("=====================================================================================")
+print(f"Best posición de abeja encontrada: {best_bee[0]}\nCon evaluacion en la funcion: {best_bee[1]}")
