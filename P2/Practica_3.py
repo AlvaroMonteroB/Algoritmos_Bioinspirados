@@ -1,3 +1,9 @@
+#Montero Barraza Alvaro David
+#Ingenieria en IA
+#5BV1
+#inteligencia de enjambre
+
+
 import math
 import random
 
@@ -14,9 +20,9 @@ def update_velocity(particle, gbest, a, b1, b2):#Actualización de velocidad
     r1, r2 = random.uniform(0, 1), random.uniform(0, 1)
 
     inercia = [a * v for v in particle.vel]
+    
     atraccion_local = [b1 * r1 * (pb - pos) for pb, pos in zip(particle.pbest, particle.pos)]#Atracción en terminos del best de la particula
     atraccion_global = [b2 * r2 * (gb - pos) for gb, pos in zip(gbest, particle.pos)]#Atraccion global
-
     new_vel = [v + local + global_ for v, local, global_ in zip(inercia, atraccion_local, atraccion_global)]
 
     return new_vel
@@ -47,7 +53,10 @@ def enjambre(iterations, num_particles, a, b1, b2):
             print(f"  pbest: {particle.pbest}")
             print(f"  gbest: {gbest}") #Mejor posición
             print()
-    print(f"Evaluacion de la funcion {funct(particle.pos[0],particle.pos[1])}")
 
-
-enjambre(iterations=50, num_particles=20, a=0.8, b1=0.7, b2=1)
+    print(f"El minimo se encuentra cerca de {gbest}")
+    print(f"Con valor de {funct(gbest[0],gbest[1])}")
+    
+    
+    
+enjambre(50,20,0.8,0.7,1)
