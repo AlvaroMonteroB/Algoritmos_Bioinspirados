@@ -5,6 +5,23 @@
 import random
 import math
 
+def explorer_cycle(bee):
+    new_list = []
+
+    if bee[2] >= 5:
+        bee = []
+        for i in range(2):
+            r = random.uniform(0, 1)
+            new_list.append(lim_inf + r * (lim_sup - lim_inf))
+        
+        bee.append(new_list)
+        val = evaluation(new_list)
+        bee.append(val)
+        bee.append(0)
+    #print("Aqui funciona")
+    return bee
+
+
 def worker_cycle(worker_list):
     min_value = 0
     best_bee = []
@@ -37,25 +54,12 @@ def worker_cycle(worker_list):
 
         if worker_list[i][1] < min_value:
             best_bee = worker_list[i]
-
+        #print(f"Aqui funciona {i}")
         print(f"Abeja: {i + 1}  Fuente: {worker_list[i][0]}")
     print()
     return best_bee
 
-def explorer_cycle(bee):
-    new_list = []
 
-    if bee[2] >= 5:
-        bee = []
-        for i in range(2):
-            r = random.uniform(0, 1)
-            new_list.append(lim_inf + r * (lim_sup - lim_inf))
-        
-        bee.append(new_list)
-        val = evaluation(new_list)
-        bee.append(val)
-        bee.append(0)
-    return bee
 
 def observer_cycle(worker_list):
     sum_value = 0
@@ -109,7 +113,7 @@ def observer_cycle(worker_list):
                     if worker_list[i][1] < min_value:
                         best_bee = worker_list[i]
                         min_value = worker_list[i][1]
-
+                #print(f"Aqui funciona {i},{j}")
     return best_bee
 
 def evaluation(bee):
@@ -150,4 +154,4 @@ for i in range(cycles):
     #print(f"best_bee"")
 
 print("=====================================================================================")
-print(f"Best posición de abeja encontrada: {best_bee[0]}\nCon evaluacion en la funcion: {best_bee[1]}")
+print(f"Mejor posición de abeja encontrada: {best_bee[0]}\nCon evaluacion en la funcion: {best_bee[1]}")
