@@ -1,5 +1,6 @@
 import math
 import random as rd
+import numpy as np
 
 
 
@@ -40,19 +41,13 @@ class pop:
         print("Codificado: "+str(gen2)+" Real: "+str(Yreal))
         return (Xreal,Yreal)
         
-        
-        
-        
-        
+      
         
     def pop_init(self):
         self.bits1=int(math.log((self.ls1-self.li1)*10**self.precision1,2)+.9)
         self.bits2=int(math.log((self.ls2-self.li2)*10**self.precision2,2)+.9)
         for i in range(self.num_pop):#for para iterar en los individuos
-            individual=[]
-            for j in range(self.bits1+self.bits2):
-                aux=rd.randint(0,1)
-                individual.append(aux)
+            individual=np.random.randint(2,size=(self.bits1+self.bits2))
             self.individuals.append(individual)
             
     
@@ -62,11 +57,13 @@ class pop:
             print("F("+str(x)+","+str(y)+")= "+str(self.obj_funct(x,y)))
             
             
-                
-            
             
     def obj_funct(self,x,y):
         return ((1-x)**2 + (100-y)**2)
+    
+    
+    def parent_selection(self):
+        self
     
     
     
