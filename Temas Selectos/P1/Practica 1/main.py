@@ -1,7 +1,7 @@
 import math
 import random as rd
 import numpy as np
-
+import matplotlib.pyplot as plt
 
 
 
@@ -44,12 +44,21 @@ class pop:
             real.append(self.li[l] +((Xint*(self.ls[l]-self.li[l]))/((2**self.bits[l])-1)))
             
         #Imprimir Individuos codificados y decodificados
+        """
         print("Individuo "+str(i))
         print("Codificado: "+str(gen[0])+" Real: "+str(real[0]))
-        print("Codificado: "+str(gen[1])+" Real: "+str(real[1]))
+        print("Codificado: "+str(gen[1])+" Real: "+str(real[1]))"""
         return real
         
       
+    def plot_graph(self):
+        x_=np.arange(len(self.vector))
+        plt.plot(x_, self.vector)
+        plt.xlabel('Índice')
+        plt.ylabel('Valor')
+        plt.title('Gráfico de dispersión del vector')
+        plt.grid(True)
+        plt.show()
         
     def pop_init(self):
         self.bits=[]
@@ -64,10 +73,10 @@ class pop:
     def evaluate_all(self):
         for i in range(len(self.individuals)):
             values=self.decode(i)
-            print("F("+str(values[0])+","+str(values[1])+")= "+str(self.obj_funct(values)))
+            print("F("+str(values[0])+","+str(values[1])+")= "+str(self.obj_funct(values)))        
             
-            
-            
+                
+    
     def obj_funct(self,real):
         x=real[0]
         y=real[1]
@@ -76,6 +85,32 @@ class pop:
     
     def parent_selection(self):
         self
+    
+    
+    def genetic_operator(self):
+        self.vector=[]
+        for i in range(self.generations):
+            print("Generacion "+str(i))
+            new_generation=[]
+            for j in range(self.num_pop/2):
+                while True:
+                    ind1=self.parent_selection()
+                    ind2=self.parent_selection()
+                    while ind1==ind2:
+                        ind2=self.parent_selection()
+        
+        
+        
+        
+        
+        
+        self.vector=np.array(self.vector)
+        self.plot_graph()
+    
+    
+    
+    
+    
     
     
 #Se tienen que poner juntos los limites superiores e inferiores, en la misma tupla
