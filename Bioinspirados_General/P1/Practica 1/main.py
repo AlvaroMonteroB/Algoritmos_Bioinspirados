@@ -1,5 +1,9 @@
 import random as rd
 from copy import deepcopy
+import numpy as np
+"""
+Este programa ejecuta un algoritmo genetico con restriccion
+"""
 P=.85#Probabilidad de cruce
 
 p_mut=.7
@@ -141,11 +145,16 @@ class Pop():
                     cont=0
                     prospectos=list() 
                     while True:
-                        
-                        pos_hijos=[]
-                        for k in range(self.genes):#Generar puntos de cruza
-                            pos_hijos.append(rd.uniform(0,1))
-
+                        pos_hijos=np.zeros(self.genes)
+                        points_cross=[(np.random.randint(0,len(pos_hijos))),(np.random.randint(0,len(pos_hijos)))]
+                        while points_cross[1]==points_cross[0]:
+                            points_cross[1]=(np.random.randint(0,len(pos_hijos)))
+                        pos_hijos[points_cross[1]]=.8
+                        pos_hijos[points_cross[0]]=.8
+                        if points_cross[0]>points_cross[1]:
+                            pos_hijos[points_cross[0]:points_cross[1]]=.9
+                        else:
+                            pos_hijos[points_cross[1]:points_cross[0]]=.9
                         for k in range(len(pos_hijos)):
                             aux_chr1=[]#Cromosomas auxiliares
                             aux_chr2=[]
@@ -209,7 +218,7 @@ class Pop():
                 sin_mejora=0
             else:
                 sin_mejora+=1
-            if sin_mejora>5:
+            if sin_mejora>20:
                 #print("Generacion "+str(i))
                 break
             
