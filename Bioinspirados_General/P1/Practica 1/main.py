@@ -1,6 +1,7 @@
 import random as rd
 from copy import deepcopy
 import numpy as np
+import matplotlib.pyplot as plt
 """
 Este programa ejecuta un algoritmo genetico con restriccion
 """
@@ -119,7 +120,7 @@ class Pop():
         
         
         
-    def genetic_operator(self):#Operador para reproducir una nueva generacion
+    def genetic_operator(self,vector):#Operador para reproducir una nueva generacion
         sin_mejora=0
         
         for i in range(self.generations):#Generaciones de nuestro algoritmo
@@ -200,27 +201,34 @@ class Pop():
                 fitness_sorted=sorted(fitness_rank,key=lambda x:x[0],reverse=True)#Sorteamos la lista de mayor a menor
                 new_generation.append(deepcopy(fitness_sorted[0][1]))#Pasan los 2 mejores individuos
                 new_generation.append(deepcopy(fitness_sorted[1][1]))
-
+                
+            #Elitismo
+            _,gen_best=self.best_individual()
+            index=rd.randint(0,len(new_generation)-1)
+            new_generation[index]=gen_best
+            
             self.individuals=new_generation.copy()#Formamos la nueva generacion 
             fitness_gen,generation_best=self.best_individual()
-            #if i<2 or i>48:
-             #   print("Generacion "+str(i))
-              #  for m in self.individuals:
-               #     for n in m:
-                #        print(str(n.quantity))
-                 #   print("\n")
+            if i<2 or i>48:
+                print("Generacion "+str(i))
+                for m in self.individuals:
+                    for n in m:
+                        print(str(n.quantity))
+                    print("\n")
             
             
             
-            
+            vector.append(fitness_gen)
             if fitness_gen>self.best_chrom[0]:
                 self.best_chrom=(fitness_gen,generation_best)
+                
                 sin_mejora=0
             else:
                 sin_mejora+=1
             if sin_mejora>20:
                 #print("Generacion "+str(i))
                 break
+        vector=np.array(vector)
             
                        
             
@@ -231,8 +239,19 @@ class Pop():
                 
 #Poblacion inicial  generaciones    peso maximo     longitud del gen
 Poblacion=Pop(10,50,30,7)
-Poblacion.pop_init()   
-Poblacion.genetic_operator()
+Poblacion.pop_init()
+vector=[]
+Poblacion.genetic_operator(vector)
+x=np.arange(len(vector))
+plt.plot(x, vector)
+plt.xlabel('Índice')
+plt.ylabel('Valor')
+plt.title('Gráfico de dispersión del vector')
+plt.grid(True)
+plt.show()
+
+
+
 _,chrom=Poblacion.best_chrom
 val=0
 for gen in chrom:
