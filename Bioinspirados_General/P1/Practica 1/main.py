@@ -7,7 +7,7 @@ Este programa ejecuta un algoritmo genetico con restriccion
 """
 P=.85#Probabilidad de cruce
 
-p_mut=.7
+p_mut=.07
 
 
 dict_names={#Name, weight, price, minimum,max
@@ -138,7 +138,7 @@ class Pop():
                     if rd.uniform(0,1)>P:#Si el valor supera .85 no se cruzan
                         new_generation.append(deepcopy(parent1)) #se pasan a la siguiente generacion
                         new_generation.append(deepcopy(parent2))
-                        band=1#Bandera de rompimiento
+                        band=1#Bandera de rompimiento para continuar for
                         break
                     #hacer cruza, mutacion y escoger los mejores individuos
                     
@@ -195,12 +195,14 @@ class Pop():
                         for g in f:#Iterar en genes para sacar el fintess
                             aux+=g.price*g.quantity#Precio por cantidad para maximizar la ganancia
                         fitness_rank.append((aux,f)) #Hacemos el fitness y el cromosoma
+                    break
                         
                 if band==1:#Si se rompió el while continuamos
                     continue
                 fitness_sorted=sorted(fitness_rank,key=lambda x:x[0],reverse=True)#Sorteamos la lista de mayor a menor
                 new_generation.append(deepcopy(fitness_sorted[0][1]))#Pasan los 2 mejores individuos
                 new_generation.append(deepcopy(fitness_sorted[1][1]))
+                
                 
             #Elitismo
             _,gen_best=self.best_individual()

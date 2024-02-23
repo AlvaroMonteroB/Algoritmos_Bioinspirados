@@ -2,6 +2,8 @@ import math
 import random as rd
 import numpy as np
 import matplotlib.pyplot as plt
+from copy import deepcopy
+from mpl_toolkits.mplot3d import Axes3D
 
 P=.9 #Probabilidad de cruza
 Pm=.05 #Probabilidad de mutacion
@@ -24,17 +26,23 @@ class pop:
             self.precision.append(precision[i])
             
         self.pop_init()
+        
 
 
     def decode(self,i):
         gen=[]
         aux=0
-        for j in range(len(self.bits)):
-            gen.append(self.individuals[i][aux:self.bits[j]+aux])
-            aux+=self.bits[j]
-        Xint=0
+        #Dividir bits de ambas variables
+        if isinstance(i,np.ndarray):
+            for j in range(len(self.bits)):
+                gen.append(i[aux:self.bits[j]+aux])
+                aux+=self.bits[j]
+         
+        else:        
+            for j in range(len(self.bits)):
+                gen.append(self.individuals[i][aux:self.bits[j]+aux])
+                aux+=self.bits[j]
         real=[]
-        
         #Binario a entero
         for l in range(self.nvar):#Numero de variables/genes
             Xint=0
@@ -84,11 +92,10 @@ class pop:
     
     
     def parent_selection(self):
-        self
-        integer1=rd.randint(0,self.num_pop)
-        integer2=rd.randint(0,self.num_pop)
+        integer1=rd.randint(0,len(self.individuals)-1)
+        integer2=rd.randint(0,len(self.individuals)-1)
         while integer1==integer2:
-            integer2=rd.randint(0,self.num_pop)
+            integer2=rd.randint(0,self.num_pop-1)
         
         champ1=self.decode(integer1)#Champ es una lista con variables x,y
         champ2=self.decode(integer2)
@@ -98,12 +105,26 @@ class pop:
             return integer2
         
     
+    def best_individual(self):
+        rank=[]
+        for i,ind in zip(range(len(self.individuals)),self.individuals):
+            vars=self.decode(i)
+            rank.append((self.obj_funct(vars),ind))
+        sorted_rank=sorted(rank,key=lambda x:x[0],reverse=False)
+        return sorted_rank[0]
+            
+        
+    
     def genetic_operator(self):
         self.vector=[]
+        fitness,_=self.best_individual()
+        self.vector.append(fitness)
         for i in range(self.generations):
             print("Generacion "+str(i))
+            num_ind=len(self.individuals)
+            print(f"Poblacion con {num_ind}")
             new_generation=[]
-            for j in range(self.num_pop/2):
+            for j in range(int(self.num_pop/2)):
                 while True:
                     ind1=self.parent_selection()#Indice de los padres
                     ind2=self.parent_selection()
@@ -111,15 +132,15 @@ class pop:
                         ind2=self.parent_selection()
                     parent1=self.individuals[ind1]
                     parent2=self.individuals[ind2]
-                    if rd.uniform(0,1)>P:#Si es mayor no se cruzan
-                        new_generation.append(parent1)
-                        new_generation.append(parent2)
+                    if rd.uniform(0,1)>=P:#Si es mayor no se cruzan
+                        new_generation.append(deepcopy(parent1))
+                        new_generation.append(deepcopy(parent2))
                         break
                     #Puntos de cruza
-                    p1=rd.randint(0,sum(self.bits))
-                    p2=rd.randint(0,sum(self.bits))
+                    p1=rd.randint(0,sum(self.bits)-1)
+                    p2=rd.randint(0,sum(self.bits)-1)
                     while p1==p2:
-                        p2=rd.randint(0,sum(self.bits))
+                        p2=rd.randint(0,sum(self.bits)-1)
                     if p1>p2:
                         son1=np.concatenate((parent1[0:p2],parent2[p2:p1],parent1[p1:]))
                         son2=np.concatenate((parent2[0:p2],parent1[p2:p1],parent2[p1:]))
@@ -127,14 +148,24 @@ class pop:
                          son1=np.concatenate((parent1[0:p1],parent2[p1:p2],parent1[p2:]))
                          son2=np.concatenate((parent2[0:p1],parent1[p1:p2],parent2[p2:]))
                     #Mutacion
-                    if rd.uniform()<=Pm:
-                        genmut=rd.randint(0,sum(self.bits))
+                    if rd.uniform(0,1)<=Pm:
+                        genmut=rd.randint(0,sum(self.bits)-1)
                         son1[genmut]=np.bitwise_xor(son1[genmut],1)
-                    if rd.uniform()<=Pm:
-                        genmut=rd.randint(0,sum(self.bits))
+                    if rd.uniform(0,1)<=Pm:
+                        genmut=rd.randint(0,sum(self.bits)-1)
                         son2[genmut]=np.bitwise_xor(son2[genmut],1)
-        
-        
+                    new_generation.append((son1))
+                    new_generation.append(son2)
+                    break
+            _,individual=self.best_individual()
+            new_generation.append(individual)
+
+            self.individuals=deepcopy(new_generation)
+            fitness,_=self.best_individual()
+            self.vector.append(fitness)
+            
+            
+
         
         
         
@@ -150,4 +181,7 @@ class pop:
     
 #Se tienen que poner juntos los limites superiores e inferiores, en la misma tupla
 Poblacion=pop(5,10,(2,2),(-2,-2),(2,2),2)
-Poblacion.evaluate_all()
+Poblacion.genetic_operator()
+fitness,chrom=Poblacion.best_individual()
+nums=Poblacion.decode(chrom)
+print(f"F({nums[0]},{nums[1]}) = {fitness}")
