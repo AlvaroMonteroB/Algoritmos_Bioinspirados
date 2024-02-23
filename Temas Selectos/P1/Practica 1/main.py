@@ -125,51 +125,44 @@ class pop:
             print(f"Poblacion con {num_ind}")
             new_generation=[]
             for j in range(int(self.num_pop/2)):
-                while True:
-                    ind1=self.parent_selection()#Indice de los padres
+                ind1=self.parent_selection()#Indice de los padres
+                ind2=self.parent_selection()
+                while ind1==ind2:
                     ind2=self.parent_selection()
-                    while ind1==ind2:
-                        ind2=self.parent_selection()
-                    parent1=self.individuals[ind1]
-                    parent2=self.individuals[ind2]
-                    if rd.uniform(0,1)>=P:#Si es mayor no se cruzan
-                        new_generation.append(deepcopy(parent1))
-                        new_generation.append(deepcopy(parent2))
-                        break
-                    #Puntos de cruza
-                    p1=rd.randint(0,sum(self.bits)-1)
+                parent1=self.individuals[ind1]
+                parent2=self.individuals[ind2]
+                if rd.uniform(0,1)>=P:#Si es mayor no se cruzan
+                    new_generation.append(deepcopy(parent1))
+                    new_generation.append(deepcopy(parent2))
+                    continue
+                #Puntos de cruza
+                p1=rd.randint(0,sum(self.bits)-1)
+                p2=rd.randint(0,sum(self.bits)-1)
+                while p1==p2:
                     p2=rd.randint(0,sum(self.bits)-1)
-                    while p1==p2:
-                        p2=rd.randint(0,sum(self.bits)-1)
-                    if p1>p2:
-                        son1=np.concatenate((parent1[0:p2],parent2[p2:p1],parent1[p1:]))
-                        son2=np.concatenate((parent2[0:p2],parent1[p2:p1],parent2[p1:]))
-                    else:
-                         son1=np.concatenate((parent1[0:p1],parent2[p1:p2],parent1[p2:]))
-                         son2=np.concatenate((parent2[0:p1],parent1[p1:p2],parent2[p2:]))
-                    #Mutacion
-                    if rd.uniform(0,1)<=Pm:
-                        genmut=rd.randint(0,sum(self.bits)-1)
-                        son1[genmut]=np.bitwise_xor(son1[genmut],1)
-                    if rd.uniform(0,1)<=Pm:
-                        genmut=rd.randint(0,sum(self.bits)-1)
-                        son2[genmut]=np.bitwise_xor(son2[genmut],1)
-                    new_generation.append((son1))
-                    new_generation.append(son2)
-                    break
+                if p1>p2:
+                    son1=np.concatenate((parent1[0:p2],parent2[p2:p1],parent1[p1:]))
+                    son2=np.concatenate((parent2[0:p2],parent1[p2:p1],parent2[p1:]))
+                else:
+                     son1=np.concatenate((parent1[0:p1],parent2[p1:p2],parent1[p2:]))
+                     son2=np.concatenate((parent2[0:p1],parent1[p1:p2],parent2[p2:]))
+                #Mutacion
+                if rd.uniform(0,1)<=Pm:
+                    genmut=rd.randint(0,sum(self.bits)-1)
+                    son1[genmut]=np.bitwise_xor(son1[genmut],1)
+                if rd.uniform(0,1)<=Pm:
+                    genmut=rd.randint(0,sum(self.bits)-1)
+                    son2[genmut]=np.bitwise_xor(son2[genmut],1)
+                new_generation.append((son1))
+                new_generation.append(son2)
+                
+
             _,individual=self.best_individual()
             new_generation.append(individual)
 
             self.individuals=deepcopy(new_generation)
             fitness,_=self.best_individual()
             self.vector.append(fitness)
-            
-            
-
-        
-        
-        
-        
         self.vector=np.array(self.vector)
         self.plot_graph()
     
