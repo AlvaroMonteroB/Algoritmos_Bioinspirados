@@ -49,7 +49,7 @@ class pop:
             for k in range(len(gen[l])):
                 j=-1-k
                 Xint+=gen[l][k]*(2**(self.bits[l]+j))
-            real.append(self.li[l] +((Xint*(self.ls[l]-self.li[l]))/((2**self.bits[l])-1)))
+            real.append(round(self.li[l] +((Xint*(self.ls[l]-self.li[l]))/((2**self.bits[l])-1)),self.precision[l]))
             
         #Imprimir Individuos codificados y decodificados
         """
@@ -93,7 +93,7 @@ class pop:
     def obj_funct(self,real):
         x=real[0]
         y=real[1]
-        return ((1-x)**2 + (100-y)**2)
+        return (((1-x)**2 + (100-y)**2))
     
     
     def parent_selection(self):
@@ -127,7 +127,7 @@ class pop:
         for i in range(self.generations):
             print("Generacion "+str(i))
             num_ind=len(self.individuals)
-            print(f"Poblacion con {num_ind}")
+            #print(f"Poblacion con {num_ind}")
             new_generation=[]
             for j in range(int(self.num_pop/2)):
                 ind1=self.parent_selection()#Indice de los padres
@@ -178,7 +178,7 @@ class pop:
     
     
 #Se tienen que poner juntos los limites superiores e inferiores, en la misma tupla
-Poblacion=pop(5,10,(2,2),(-2,-2),(2,2),2)
+Poblacion=pop(15,50,(2,102),(-2,98),(2,2),2)
 Poblacion.genetic_operator()
 fitness,chrom=Poblacion.best_individual()
 nums=Poblacion.decode(chrom)
