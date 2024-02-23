@@ -72,10 +72,15 @@ class pop:
         self.bits=[]
         for i in range(self.nvar):
             self.bits.append(int(math.log((self.ls[i]-self.li[i])*10**self.precision[i],2)+.9))
-            
+        #x_sz=sum(self.bits)
+        #y_sz=self.num_pop
+        #self.individuals=np.empty((y_sz,x_sz))
+        
         for i in range(self.num_pop):#for para iterar en los individuos
             individual=np.random.randint(2,size=(sum(self.bits)))
+            #self.individuals[i, : ]=individual
             self.individuals.append(individual)
+            
             
     
     def evaluate_all(self):
@@ -149,10 +154,10 @@ class pop:
                 #Mutacion
                 if rd.uniform(0,1)<=Pm:
                     genmut=rd.randint(0,sum(self.bits)-1)
-                    son1[genmut]=np.bitwise_xor(son1[genmut],1)
+                    son1[genmut]^=1
                 if rd.uniform(0,1)<=Pm:
                     genmut=rd.randint(0,sum(self.bits)-1)
-                    son2[genmut]=np.bitwise_xor(son2[genmut],1)
+                    son2[genmut]^=1
                 new_generation.append((son1))
                 new_generation.append(son2)
                 
