@@ -3,8 +3,8 @@ import random as rd
 import numpy as np
 import matplotlib.pyplot as plt
 
-
-
+P=.9 #Probabilidad de cruza
+Pm=.05 #Probabilidad de mutacion
 class pop:
     def __init__(self,num_pop,generations,ls,li,precision,nvar) -> None:
         self.individuals=[]
@@ -85,7 +85,18 @@ class pop:
     
     def parent_selection(self):
         self
-    
+        integer1=rd.randint(0,self.num_pop)
+        integer2=rd.randint(0,self.num_pop)
+        while integer1==integer2:
+            integer2=rd.randint(0,self.num_pop)
+        
+        champ1=self.decode(integer1)#Champ es una lista con variables x,y
+        champ2=self.decode(integer2)
+        if self.obj_funct(champ1)>self.obj_funct(champ2):
+            return integer1
+        else:
+            return integer2
+        
     
     def genetic_operator(self):
         self.vector=[]
@@ -94,10 +105,34 @@ class pop:
             new_generation=[]
             for j in range(self.num_pop/2):
                 while True:
-                    ind1=self.parent_selection()
+                    ind1=self.parent_selection()#Indice de los padres
                     ind2=self.parent_selection()
                     while ind1==ind2:
                         ind2=self.parent_selection()
+                    parent1=self.individuals[ind1]
+                    parent2=self.individuals[ind2]
+                    if rd.uniform(0,1)>P:#Si es mayor no se cruzan
+                        new_generation.append(parent1)
+                        new_generation.append(parent2)
+                        break
+                    #Puntos de cruza
+                    p1=rd.randint(0,sum(self.bits))
+                    p2=rd.randint(0,sum(self.bits))
+                    while p1==p2:
+                        p2=rd.randint(0,sum(self.bits))
+                    if p1>p2:
+                        son1=np.concatenate((parent1[0:p2],parent2[p2:p1],parent1[p1:]))
+                        son2=np.concatenate((parent2[0:p2],parent1[p2:p1],parent2[p1:]))
+                    else:
+                         son1=np.concatenate((parent1[0:p1],parent2[p1:p2],parent1[p2:]))
+                         son2=np.concatenate((parent2[0:p1],parent1[p1:p2],parent2[p2:]))
+                    #Mutacion
+                    if rd.uniform()<=Pm:
+                        genmut=rd.randint(0,sum(self.bits))
+                        son1[genmut]=np.bitwise_xor(son1[genmut],1)
+                    if rd.uniform()<=Pm:
+                        genmut=rd.randint(0,sum(self.bits))
+                        son2[genmut]=np.bitwise_xor(son2[genmut],1)
         
         
         
