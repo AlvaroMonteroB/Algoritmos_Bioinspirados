@@ -173,7 +173,7 @@ class pop:
     
     
 #Se tienen que poner juntos los limites superiores e inferiores, en la misma tupla
-Poblacion=pop(5,10,(2,101),(-2,99),(2,2),2)
+Poblacion=pop(5,10,(2,2),(-2,-2),(2,2),2)
 Poblacion.genetic_operator()
 fitness,chrom=Poblacion.best_individual()
 nums=Poblacion.decode(chrom)
