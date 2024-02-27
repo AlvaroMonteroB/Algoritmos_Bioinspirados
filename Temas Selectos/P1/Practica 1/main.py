@@ -5,6 +5,13 @@ import matplotlib.pyplot as plt
 from copy import deepcopy
 from mpl_toolkits.mplot3d import Axes3D
 
+#Montero Barraza Alvaro David
+#6BV1
+#Ingenieria en Inteligencia Artificial
+
+
+
+
 P=.9 #Probabilidad de cruza
 Pm=.05 #Probabilidad de mutacion
 class pop:
@@ -51,11 +58,7 @@ class pop:
                 Xint+=gen[l][k]*(2**(self.bits[l]+j))
             real.append(round(self.li[l] +((Xint*(self.ls[l]-self.li[l]))/((2**self.bits[l])-1)),self.precision[l]))
             
-        #Imprimir Individuos codificados y decodificados
-        """
-        print("Individuo "+str(i))
-        print("Codificado: "+str(gen[0])+" Real: "+str(real[0]))
-        print("Codificado: "+str(gen[1])+" Real: "+str(real[1]))"""
+
         return real
         
       
@@ -80,12 +83,19 @@ class pop:
             individual=np.random.randint(2,size=(sum(self.bits)))
             #self.individuals[i, : ]=individual
             self.individuals.append(individual)
-            
+        self.evaluate_all()
             
     
     def evaluate_all(self):
         for i in range(len(self.individuals)):
             values=self.decode(i)
+                    #Imprimir Individuos codificados y decodificados
+           
+            print("Individuo "+str(i))
+            print("Codificado: "+str(self.individuals[i][0:self.bits[0]])+" Real: "+str(values[0]))
+            print("Codificado: "+str(self.individuals[i][self.bits[0]: ])+" Real: "+str(values[1]))
+           
+        
             print("F("+str(values[0])+","+str(values[1])+")= "+str(self.obj_funct(values)))        
             
                 
@@ -104,7 +114,7 @@ class pop:
         
         champ1=self.decode(integer1)#Champ es una lista con variables x,y
         champ2=self.decode(integer2)
-        if self.obj_funct(champ1)>self.obj_funct(champ2):
+        if self.obj_funct(champ1)<self.obj_funct(champ2):
             return integer1
         else:
             return integer2
@@ -163,7 +173,11 @@ class pop:
                 
 
             _,individual=self.best_individual()
-            new_generation.append(individual)
+            if self.num_pop%2==0:
+                index=rd.randint(0,self.num_pop-1)
+                new_generation[index]=individual
+            else:
+                new_generation.append(individual)
 
             self.individuals=deepcopy(new_generation)
             fitness,_=self.best_individual()
@@ -178,7 +192,7 @@ class pop:
     
     
 #Se tienen que poner juntos los limites superiores e inferiores, en la misma tupla
-Poblacion=pop(15,50,(2,102),(-2,98),(2,2),2)
+Poblacion=pop(5,10,(2,2),(-2,-2),(2,2),2)
 Poblacion.genetic_operator()
 fitness,chrom=Poblacion.best_individual()
 nums=Poblacion.decode(chrom)
