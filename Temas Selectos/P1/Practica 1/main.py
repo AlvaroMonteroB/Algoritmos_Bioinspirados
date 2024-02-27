@@ -56,7 +56,7 @@ class pop:
             for k in range(len(gen[l])):
                 j=-1-k
                 Xint+=gen[l][k]*(2**(self.bits[l]+j))
-            real.append(round(self.li[l] +((Xint*(self.ls[l]-self.li[l]))/((2**self.bits[l])-1)),self.precision[l]))
+            real.append(self.li[l] +((Xint*(self.ls[l]-self.li[l]))/((2**self.bits[l])-1)))
             
 
         return real
@@ -103,7 +103,7 @@ class pop:
     def obj_funct(self,real):
         x=real[0]
         y=real[1]
-        return (((1-x)**2 + (100-y)**2))
+        return (((1-x)**2 + 100*(y-x**2)**2))
     
     
     def parent_selection(self):
@@ -192,7 +192,7 @@ class pop:
     
     
 #Se tienen que poner juntos los limites superiores e inferiores, en la misma tupla
-Poblacion=pop(5,10,(2,2),(-2,-2),(2,2),2)
+Poblacion=pop(10,50,(2,2),(-2,-2),(2,2),2)
 Poblacion.genetic_operator()
 fitness,chrom=Poblacion.best_individual()
 nums=Poblacion.decode(chrom)
