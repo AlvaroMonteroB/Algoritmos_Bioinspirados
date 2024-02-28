@@ -103,7 +103,7 @@ class pop:
     def obj_funct(self,real):
         x=real[0]
         y=real[1]
-        return (((1-x)**2 + 100*(y-x**2)**2))
+        return (((1-x**2) + 100*(y-x**2)**2))
     
     
     def parent_selection(self):
