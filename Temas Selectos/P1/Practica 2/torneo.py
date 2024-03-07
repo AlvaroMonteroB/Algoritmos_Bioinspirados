@@ -11,7 +11,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 
 
-
+Pi=3.141592653
 P=.9 #Probabilidad de cruza
 Pm=.05 #Probabilidad de mutacion
 class pop:
@@ -103,7 +103,7 @@ class pop:
     def obj_funct(self,real):
         x=real[0]
         y=real[1]
-        return (((1-x)**2 + 100*(y-x**2)**2))
+        return (20+(x**2-10*math.cos(2*Pi*x))+(y**2-10*math.cos(2*Pi*y)))
     
     
     def parent_selection(self):
