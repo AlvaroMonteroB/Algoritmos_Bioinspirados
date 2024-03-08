@@ -79,7 +79,7 @@ class pop:
             individual=np.random.randint(2,size=(sum(self.bits)))
             #self.individuals[i, : ]=individual
             self.individuals.append(individual)
-        self.evaluate_all()
+        #self.evaluate_all()
             
     
     def evaluate_all(self):
@@ -103,18 +103,15 @@ class pop:
     
     
     #TODO==============================================
-    def parent_selection(self):
+    def parent_selection(self,index_set):
         integer1=rd.randint(0,len(self.individuals)-1)
-        integer2=rd.randint(0,len(self.individuals)-1)
-        while integer1==integer2:
-            integer2=rd.randint(0,self.num_pop-1)
+        while integer1 in index_set:
+            integer1=rd.randint(0,self.num_pop-1)
+            
+        index_set.add(integer1)
+        return integer1
         
-        champ1=self.decode(integer1)#Champ es una lista con variables x,y
-        champ2=self.decode(integer2)
-        if self.obj_funct(champ1)<self.obj_funct(champ2):
-            return integer1
-        else:
-            return integer2
+        
         
     
     def best_individual(self):
@@ -132,15 +129,16 @@ class pop:
         fitness,_=self.best_individual()
         self.vector.append(fitness)
         for i in range(self.generations):
-            print("Generacion "+str(i))
+            #print("Generacion "+str(i))
             num_ind=len(self.individuals)
             #print(f"Poblacion con {num_ind}")
+            index=set()
             new_generation=[]
             for j in range(int(self.num_pop/2)):
-                ind1=self.parent_selection()#Indice de los padres
-                ind2=self.parent_selection()
-                while ind1==ind2:
-                    ind2=self.parent_selection()
+                prospectos=[]
+                ind1=self.parent_selection(index)#Indice de los padres
+                ind2=self.parent_selection(index)
+                
                 parent1=self.individuals[ind1]
                 parent2=self.individuals[ind2]
                 if rd.uniform(0,1)>=P:#Si es mayor no se cruzan
@@ -165,20 +163,39 @@ class pop:
                 if rd.uniform(0,1)<=Pm:
                     genmut=rd.randint(0,sum(self.bits)-1)
                     son2[genmut]^=1
-                new_generation.append((son1))
-                new_generation.append(son2)
+                prospectos.append(son1)
+                prospectos.append(son2) 
+                prospectos.append(parent1)
+                prospectos.append(parent2)
+                fitness_rank=[]   
+                for gen in prospectos:
+                    vars_=self.decode(gen)
+                    fitness_rank.append((gen,self.obj_funct(vars_)))
+                fitness_sorted=sorted(fitness_rank,key=lambda x:x[1],reverse=False)#Sorteamos de menor a mayor
                 
-
+                    
+                    
+                
+                new_generation.append(fitness_sorted[0][0])
+                new_generation.append(fitness_sorted[1][0])
+                
+            """
             _,individual=self.best_individual()
             if self.num_pop%2==0:
                 index=rd.randint(0,self.num_pop-1)
                 new_generation[index]=individual
             else:
                 new_generation.append(individual)
-
+                                                """
             self.individuals=deepcopy(new_generation)
             fitness,_=self.best_individual()
             self.vector.append(fitness)
         self.vector=np.array(self.vector)
-        self.plot_graph()
-    
+        #self.plot_graph()
+
+if __name__ == "__main__":    
+    Poblacion=pop(20,80,(2,2),(-2,-2),(2,2),2)
+    Poblacion.genetic_operator()
+    fitness,chrom=Poblacion.best_individual()
+    nums=Poblacion.decode(chrom)
+    print(f"F({nums[0]},{nums[1]}) = {fitness}")

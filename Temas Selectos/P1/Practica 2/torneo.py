@@ -83,7 +83,7 @@ class pop:
             individual=np.random.randint(2,size=(sum(self.bits)))
             #self.individuals[i, : ]=individual
             self.individuals.append(individual)
-        self.evaluate_all()
+        #self.evaluate_all()
             
     
     def evaluate_all(self):
@@ -135,7 +135,7 @@ class pop:
         fitness,_=self.best_individual()
         self.vector.append(fitness)
         for i in range(self.generations):
-            print("Generacion "+str(i))
+            #print("Generacion "+str(i))
             num_ind=len(self.individuals)
             #print(f"Poblacion con {num_ind}")
             new_generation=[]
@@ -183,17 +183,18 @@ class pop:
             fitness,_=self.best_individual()
             self.vector.append(fitness)
         self.vector=np.array(self.vector)
-        self.plot_graph()
+        #self.plot_graph()
     
     
     
     
     
     
-"""
+
 #Se tienen que poner juntos los limites superiores e inferiores, en la misma tupla
-Poblacion=pop(20,80,(2,2),(-2,-2),(3,3),2)
-Poblacion.genetic_operator()
-fitness,chrom=Poblacion.best_individual()
-nums=Poblacion.decode(chrom)
-print(f"F({nums[0]},{nums[1]}) = {fitness}")"""
+if __name__ == "__main__":
+    Poblacion=pop(20,80,(2,2),(-2,-2),(3,3),2)
+    Poblacion.genetic_operator()
+    fitness,chrom=Poblacion.best_individual()
+    nums=Poblacion.decode(chrom)
+    print(f"F({nums[0]},{nums[1]}) = {fitness}")
