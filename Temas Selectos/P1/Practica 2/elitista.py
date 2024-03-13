@@ -191,10 +191,10 @@ class pop:
             fitness,_=self.best_individual()
             self.vector.append(fitness)
         self.vector=np.array(self.vector)
-        #self.plot_graph()
+        self.plot_graph()
 
 if __name__ == "__main__":    
-    Poblacion=pop(20,80,(2,2),(-2,-2),(2,2),2)
+    Poblacion=pop(80,80,(2,2),(-2,-2),(4,4),2)
     Poblacion.genetic_operator()
     fitness,chrom=Poblacion.best_individual()
     nums=Poblacion.decode(chrom)

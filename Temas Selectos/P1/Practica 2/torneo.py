@@ -193,7 +193,7 @@ class pop:
 
 #Se tienen que poner juntos los limites superiores e inferiores, en la misma tupla
 if __name__ == "__main__":
-    Poblacion=pop(20,80,(2,2),(-2,-2),(3,3),2)
+    Poblacion=pop(80,80,(2,2),(-2,-2),(4,4),2)
     Poblacion.genetic_operator()
     fitness,chrom=Poblacion.best_individual()
     nums=Poblacion.decode(chrom)
