@@ -5,19 +5,19 @@ import numpy as np
 import torneo as trn
 import elitista
 
-
+ejecuciones=10
 
 
 vect_best_turnmt=[]
 vect_best_elitsm=[]
 
-for i in range(10):
+for i in range(ejecuciones):
     poblacion=trn.pop(100,200,(5.12,5.12),(-5.12,-5.12),(5,5),2)
     poblacion.genetic_operator()
     fitness,_=poblacion.best_individual()
     vect_best_turnmt.append(fitness)
     
-for i in range(10):
+for i in range(ejecuciones):
     poblacion=elitista.pop(100,200,(5.12,5.12),(-5.12,-5.12),(5,5),2)
     poblacion.genetic_operator()
     fitness,_=poblacion.best_individual()
