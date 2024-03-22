@@ -10,6 +10,9 @@ Pi=3.141592653
 P=.9
 Pm=.05
 
+
+
+
 class pop:
     def __init__(self,num_pop,generations,ls,li,precision,nvar) -> None:
         self.individuals=[]
