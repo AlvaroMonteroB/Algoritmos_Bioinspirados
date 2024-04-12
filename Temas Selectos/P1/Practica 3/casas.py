@@ -79,7 +79,7 @@ class pop:
             individual=np.random.randint(2,size=(sum(self.bits)))
             #self.individuals[i, : ]=individual
             self.individuals.append(individual)
-        self.evaluate_all()
+        #self.evaluate_all()
             
     
     def evaluate_all(self):
@@ -111,11 +111,11 @@ class pop:
         g2=1200-(2*x+4*y)
         g3=(x+y)*.4-x
         if g1 > 0:
-            sum+=g1**2
+            sum+=g1**2 * 10000
         if g2 > 0:
-            sum+=g2**2
+            sum+=g2**2 * 10000
         if g3 > 0:
-            sum+=g3**2
+            sum+=g3**2 * 10000
         return sum
             
             
@@ -211,10 +211,10 @@ class pop:
             fitness,_=self.best_individual()
             self.vector.append(fitness)
         self.vector=np.array(self.vector)
-        self.plot_graph()
+        #self.plot_graph()
 
 if __name__ == "__main__":    
-    Poblacion=pop(200,200,(200,240),(150,200),(0,0),2)
+    Poblacion=pop(200,200,(250,250),(150,150),(0,0),2)
     Poblacion.genetic_operator()
     fitness,chrom=Poblacion.best_individual()
     nums=Poblacion.decode(chrom)
