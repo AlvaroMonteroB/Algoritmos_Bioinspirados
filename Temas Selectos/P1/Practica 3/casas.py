@@ -74,13 +74,7 @@ class pop:
         #x_sz=sum(self.bits)
         #y_sz=self.num_pop
         #self.individuals=np.empty((y_sz,x_sz))
-        
-        for i in range(self.num_pop):#for para iterar en los individuos
-            individual=np.random.randint(2,size=(sum(self.bits)))
-            #self.individuals[i, : ]=individual
-            self.individuals.append(individual)
-        #self.evaluate_all()
-            
+        self.individuals=[np.random.randint(2,size=(sum(self.bits))) for i in range(self.num_pop)]
     
     def evaluate_all(self):
         for i in range(len(self.individuals)):
@@ -111,23 +105,20 @@ class pop:
         g2=1200-(2*x+4*y)
         g3=(x+y)*.4-x
         if g1 > 0:
-            sum+=g1**2 * 10000
+            sum+=(g1**2) * 10000
         if g2 > 0:
-            sum+=g2**2 * 10000
+            sum+=(g2**2) * 10000
         if g3 > 0:
-            sum+=g3**2 * 10000
+            sum+=(g3**2) * 10000
         return sum
             
             
         
     
     #TODO==============================================
-    def parent_selection(self,index_set):
-        integer1=rd.randint(0,len(self.individuals)-1)
-        while integer1 in index_set:
-            integer1=rd.randint(0,self.num_pop-1)
-            
-        index_set.add(integer1)
+    def parent_selection(self,available):
+        integer1=rd.choice(list(available))
+        available.remove(integer1)
         return integer1
         
         
@@ -140,6 +131,8 @@ class pop:
             rank.append((self.obj_funct(vars),ind))
         sorted_rank=sorted(rank,key=lambda x:x[0],reverse=False)
         return sorted_rank[0]
+    
+    
             
         
     #TODO=============================================
@@ -149,14 +142,14 @@ class pop:
         self.vector.append(fitness)
         for i in range(self.generations):
             #print("Generacion "+str(i))
-            num_ind=len(self.individuals)
             #print(f"Poblacion con {num_ind}")
-            index=set()
+            
+            available_indices = set(range(self.num_pop))
             new_generation=[]
             for j in range(int(self.num_pop/2)):
                 prospectos=[]
-                ind1=self.parent_selection(index)#Indice de los padres
-                ind2=self.parent_selection(index)
+                ind1=self.parent_selection(available_indices)#Indice de los padres
+                ind2=self.parent_selection(available_indices)
                 
                 parent1=self.individuals[ind1]
                 parent2=self.individuals[ind2]
@@ -168,8 +161,6 @@ class pop:
                 points = sorted(rd.sample(range(sum(self.bits)), 2))
                 p1=points[0]
                 p2=points[1]
-                while p1==p2:
-                    p2=rd.randint(0,sum(self.bits)-1)
                 if p1>p2:
                     son1=np.concatenate((parent1[0:p2],parent2[p2:p1],parent1[p1:]))
                     son2=np.concatenate((parent2[0:p2],parent1[p2:p1],parent2[p1:]))
@@ -208,13 +199,13 @@ class pop:
                 new_generation.append(individual)
                                                 """
             self.individuals=deepcopy(new_generation)
-            fitness,_=self.best_individual()
-            self.vector.append(fitness)
-        self.vector=np.array(self.vector)
+            #fitness,_=self.best_individual()
+            #self.vector.append(fitness)
+        #self.vector=np.array(self.vector)
         #self.plot_graph()
 
 if __name__ == "__main__":    
-    Poblacion=pop(200,200,(250,250),(150,150),(0,0),2)
+    Poblacion=pop(200,200,(400,400),(0,0),(0,0),2)
     Poblacion.genetic_operator()
     fitness,chrom=Poblacion.best_individual()
     nums=Poblacion.decode(chrom)
