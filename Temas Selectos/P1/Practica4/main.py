@@ -88,10 +88,21 @@ class pop:
                     
     def evaluate_one(self,individual):
         distance=self.dist_matrix[individual[0]][individual[-1]]
-        for i in range(1,self.num_cities-1):
+        for i in range(self.num_cities-1):
             distance+=self.dist_matrix[individual[i]][individual[i+1]]
         return distance
             
+    def evaluate_best(self,individual):
+        distance=self.dist_matrix[individual[0]][individual[-1]]
+        print(distance)
+        for i in range(self.num_cities-1):
+            aux=self.dist_matrix[individual[i]][individual[i+1]]
+            distance+=aux
+            print(f'Distancia agregada {aux} distancia fin {distance} indices {i} {i+1}')
+        return distance
+    
+    
+    
     def best_route(self):
         indiv_fitness=[]
         for ind in self.individuals:
@@ -166,5 +177,8 @@ poblacion.pop_init()
 poblacion.genetic_operator(50)
 
 ind,fitness=poblacion.best_route()
+
 print(ind)
 print(fitness)
+
+print(poblacion.evaluate_best(ind))
