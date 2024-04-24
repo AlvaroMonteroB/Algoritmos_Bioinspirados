@@ -94,11 +94,12 @@ class pop:
             
     def evaluate_best(self,individual):
         distance=self.dist_matrix[individual[0]][individual[-1]]
+        print(f'Distancia agregada {distance} distancia fin {distance} de {cities[individual[0]]} a {cities[individual[-1]]}')
         print(distance)
         for i in range(self.num_cities-1):
             aux=self.dist_matrix[individual[i]][individual[i+1]]
             distance+=aux
-            print(f'Distancia agregada {aux} distancia fin {distance} indices {i} {i+1}')
+            print(f'Distancia agregada {aux} distancia fin {distance} de {cities[i]} a {cities[i+1]}')
         return distance
     
     
