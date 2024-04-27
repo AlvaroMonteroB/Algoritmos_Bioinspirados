@@ -3,6 +3,8 @@
 #Agente viajero
 import random as rd
 from copy import deepcopy
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 P=.9
@@ -28,6 +30,7 @@ class pop:
     def __init__(self,num_pop,dist_matrix) -> None:
         self.num_pop=num_pop
         self.dist_matrix=dist_matrix
+        self.pop_init()
         
     def pop_init(self):
         self.num_cities=len(self.dist_matrix)
@@ -46,7 +49,7 @@ class pop:
 
 
     def heuristic(self,individual,m):
-        
+        #return individual
         output=individual.copy()
         #print(output)
         for i in range(self.num_cities):
@@ -82,7 +85,15 @@ class pop:
             
         return output
         
-            
+    
+    def plot_graph(self):
+        x_=np.arange(len(self.vector))
+        plt.plot(x_, self.vector)
+        plt.xlabel('Índice')
+        plt.ylabel('Valor')
+        plt.title('Gráfico de dispersión del vector')
+        plt.grid(True)
+        plt.show()        
     
     
                     
@@ -95,7 +106,7 @@ class pop:
     def evaluate_best(self,individual):
         distance=self.dist_matrix[individual[0]][individual[-1]]
         print(f'Distancia agregada {distance} distancia fin {distance} de {cities[individual[0]]} a {cities[individual[-1]]}')
-        print(distance)
+        #print(distance)
         for i in range(self.num_cities-1):
             aux=self.dist_matrix[individual[i]][individual[i+1]]
             distance+=aux
@@ -104,7 +115,7 @@ class pop:
     
     
     
-    def best_route(self):
+    def best_route(self) :
         indiv_fitness=[]
         for ind in self.individuals:
                 indiv_fitness.append((ind.copy(),self.evaluate_one(ind)))
@@ -119,7 +130,13 @@ class pop:
         return integer1     
      
             
-    def genetic_operator(self,generations):
+    def genetic_operator(self,generations, graph=False):
+        
+       if graph:
+            self.vector=[]
+            _,fitness=self.best_route()
+            self.vector.append(fitness)
+        
        for i in range(generations):
             available_indices = set(range(self.num_pop))
             new_generation=[]
@@ -167,19 +184,26 @@ class pop:
                 new_generation.append(fitness_sorted[1][0])
             
             self.individuals=deepcopy(new_generation)
+
+            if graph:
+                _,fitness=self.best_route()
+                self.vector.append(fitness)
+       if rd.uniform(0,1)<Pm:    
+            index_random=rd.randint(0,self.num_pop)
+            rd.shuffle(self.individuals[index_random])
         
+       if graph:
+            self.vector=np.array(self.vector)
+            self.plot_graph()
         
-        
-        
 
+if __name__ == "__main__":   
+    poblacion=pop(20,distances)
+    poblacion.genetic_operator(20,True)
 
-poblacion=pop(20,distances)
-poblacion.pop_init()
-poblacion.genetic_operator(50)
+    ind,fitness=poblacion.best_route()
 
-ind,fitness=poblacion.best_route()
+    print(ind)
+    print(fitness)
 
-print(ind)
-print(fitness)
-
-print(poblacion.evaluate_best(ind))
+    print(poblacion.evaluate_best(ind))
