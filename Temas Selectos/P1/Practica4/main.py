@@ -105,12 +105,12 @@ class pop:
             
     def evaluate_best(self,individual):
         distance=self.dist_matrix[individual[0]][individual[-1]]
-        print(f'Distancia agregada {distance} distancia fin {distance} de {cities[individual[0]]} a {cities[individual[-1]]}')
+        print(f'Distancia agregada {distance} distancia fin {distance} de {cities[individual[-1]]} a {cities[individual[0]]}')
         #print(distance)
         for i in range(self.num_cities-1):
             aux=self.dist_matrix[individual[i]][individual[i+1]]
             distance+=aux
-            print(f'Distancia agregada {aux} distancia fin {distance} de {cities[i]} a {cities[i+1]}')
+            print(f'Distancia agregada {aux} distancia fin {distance} de {cities[individual[i]]} a {cities[individual[i+1]]}')
         return distance
     
     
@@ -135,6 +135,7 @@ class pop:
        if graph:
             self.vector=[]
             _,fitness=self.best_route()
+            #print(fitness)
             self.vector.append(fitness)
         
        for i in range(generations):
@@ -187,6 +188,7 @@ class pop:
 
             if graph:
                 _,fitness=self.best_route()
+                #print(fitness)
                 self.vector.append(fitness)
        if rd.uniform(0,1)<Pm:    
             index_random=rd.randint(0,self.num_pop)
@@ -203,7 +205,7 @@ if __name__ == "__main__":
 
     ind,fitness=poblacion.best_route()
 
-    print(ind)
+    print(f"Individuo {ind}")
     print(fitness)
 
     print(poblacion.evaluate_best(ind))
