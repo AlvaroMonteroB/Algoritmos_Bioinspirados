@@ -8,20 +8,31 @@ import math
 import random
 
 
+def obj_funct(vals):
+    #print(vals)
+    x=vals[0]
+    y=vals[1]
+    z=vals[2]
+    
+    return x+y-z
+
 
 class Particle:
     def __init__(self,ls,li):
-        self.pos = [[random.uniform(li[i],ls[i])] for i in range(len(ls))]#Generamos posiciones en el rango deseado
+        self.pos = [random.uniform(li[i],ls[i]) for i in range(len(ls))]#Generamos posiciones en el rango deseado 
+        #print(self.pos)
         dj=[ls[i]-li[i] for i in range(len(ls))]
         
         self.vel =[-dj[i]+2*(random.uniform(0,1)*dj[i]) for i in range(len(dj))]#Generamos la velocidad en el rango deseado
 
         self.pbest = self.pos.copy()#Por ahora este es el best
+        self.fpbest= self.evaluate()
         self.evaluate()
         
     def evaluate(self):
-        self.fpbest
-        pass    
+        return obj_funct(self.pos)
+
+            
         
     def print_vars(self):
         print(f"Pos {self.pos}, vel {self.vel}")
@@ -46,15 +57,15 @@ class Particle:
                 self.vel[i]=-d + 2*random.uniform(0,1)*d
                 
     def update_pbest(self):
-        
+        pbest=[]
     
   
         
 def enjambre(iterations,num_particles,ls,li,inertia,c1,c2):#Pasamos ls,li ya qur tienen forma [5,5] y [-5,-5] respectivamente
     particles=[Particle(ls,li) for i in range(num_particles)]
     
-    for i in particles:
-        i.print_vars()
+    """for i in particles:
+        i.print_vars()"""
     
     #fitnes_part=[[particle.fpbest,particle.pos] for particle in particles]
     
@@ -67,15 +78,23 @@ def enjambre(iterations,num_particles,ls,li,inertia,c1,c2):#Pasamos ls,li ya qur
         for i,particle in enumerate(particles):
             particle.update_vel(inertia,c1,c2,xpbest)
             
-            particle.pos = [pos + vel for pos,vel in zip(particle.pos,particle.vel)]
+            particle.pos = [pos + vel for pos,vel in zip(particle.pos,particle.vel)]#Actualizar posicion
             #Rectificacion de violaciones
-            particle.rectify(ls,li)
-            particle_best= min(particles, key=lambda p: p.fpbest)
-
+            particle.rectify(ls,li)#Rectificar
+            
+            val=particle.evaluate()
+            if val<particle.fpbest:#Actualizamos el pbest de la particula
+                particle.pbest=particle.pos.copy()
+            
+            particle_best= min(particles, key=lambda p: p.fpbest)#Mejor particula
             xpbest=particle_best.pos
+            best_fitness=particle_best.fpbest
+    
+    print(best_fitness)
+    print(xpbest)
     
     
     
     
 if __name__ == "__main__":  
-    enjambre(10,10,[5,5],[-5,-5])
+    enjambre(100,200,[100,100,100],[0,0,0],.2,.3,.3)
