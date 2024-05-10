@@ -70,7 +70,7 @@ def enjambre(iterations,num_particles,ls,li,inertia,c1,c2):#Pasamos ls,li ya qur
     #fitnes_part=[[particle.fpbest,particle.pos] for particle in particles]
     
     particle_best= min(particles, key=lambda p: p.fpbest)
-    xpbest=particle_best.pos
+    xpbest=particle_best.pos#x position best
     best_fitness=particle_best.fpbest
     
     for iteration in range(iterations):
@@ -82,19 +82,17 @@ def enjambre(iterations,num_particles,ls,li,inertia,c1,c2):#Pasamos ls,li ya qur
             #Rectificacion de violaciones
             particle.rectify(ls,li)#Rectificar
             
-            val=particle.evaluate()
-            if val<particle.fpbest:#Actualizamos el pbest de la particula
-                particle.pbest=particle.pos.copy()
             
-            particle_best= min(particles, key=lambda p: p.fpbest)#Mejor particula
-            xpbest=particle_best.pos
-            best_fitness=particle_best.fpbest
+            if obj_funct(particle.pos)<obj_funct(particle.pbest):#Actualizamos el pbest de la particula
+                particle.pbest=particle.pos.copy()
+            if obj_funct(particle.pos)<obj_funct(xpbest):
+                xpbest=particle.pos.copy()
     
-    print(best_fitness)
+    print(obj_funct(xpbest)) 
     print(xpbest)
     
     
     
     
 if __name__ == "__main__":  
-    enjambre(100,200,[100,100,100],[0,0,0],.2,.3,.3)
+    enjambre(100,200,[100,100,100],[0,0,0],.8,.7,.1)
