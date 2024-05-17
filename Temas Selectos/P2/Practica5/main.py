@@ -14,7 +14,7 @@ def obj_funct(vals):
     y=vals[1]
     z=vals[2]
     
-    return x+y-z
+    return x**2+y**2+z**2
 
 
 class Particle:
@@ -95,4 +95,4 @@ def enjambre(iterations,num_particles,ls,li,inertia,c1,c2):#Pasamos ls,li ya qur
     
     
 if __name__ == "__main__":  
-    enjambre(100,200,[100,100,100],[0,0,0],.8,.7,.1)
+    enjambre(100,200,[100,100,100],[-100,-100,-100],.8,.7,.1)
