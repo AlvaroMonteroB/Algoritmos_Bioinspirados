@@ -1,6 +1,6 @@
 #Montero Barraza Alvaro David
 #Ingenieria en IA
-#5BV1
+#6BV1
 #inteligencia de enjambre
 
 
