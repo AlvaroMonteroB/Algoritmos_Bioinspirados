@@ -63,7 +63,7 @@ class Particle:
         
 def enjambre(iterations,num_particles,ls,li,inertia,c1,c2):#Pasamos ls,li ya qur tienen forma [5,5] y [-5,-5] respectivamente
     particles=[Particle(ls,li) for i in range(num_particles)]
-    
+    w=[0 for i in range(num_particles)]
     #Matriz topológica
     nbh=[]#Vecindario
     for i in range(num_particles):#Actual, siguiente, anterior, Mejor posicion, mejor fitness
@@ -85,7 +85,8 @@ def enjambre(iterations,num_particles,ls,li,inertia,c1,c2):#Pasamos ls,li ya qur
             #determinar particula lider
             for p in range(3): #nbh[i][3] es la posicion de la mejor particula
                 if obj_funct(nbh[i][p].pos)<obj_funct(nbh[i][3]):
-                    nbh[i][3]=nbh[i][p].pos                    
+                    nbh[i][3]=nbh[i][p].pos     
+            #determinar w por muestreo               
                 
             for j in range(3):#Iteramos en los vecinos del vecindario
                 particle=nbh[i][j] #vecindario i y vecino j
@@ -104,8 +105,11 @@ def enjambre(iterations,num_particles,ls,li,inertia,c1,c2):#Pasamos ls,li ya qur
                 
                 if obj_funct(particle.pos)<obj_funct(particle.pbest):#Actualizamos el pbest de la particula
                     particle.pbest=particle.pos.copy()
+                #Actualizar valores de wr y n    
+                
                 if obj_funct(particle.pos)<obj_funct(nbh[i][3]):
                     nbh[i][3]=particle.pos.copy()
+                
     
     particles_fitness=[(particle.pbest,obj_funct(particle.pbest)) for particle in particles]
     particle_best=min(particles_fitness, key=lambda x: x[1])

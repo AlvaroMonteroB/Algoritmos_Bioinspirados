@@ -12,9 +12,8 @@ def obj_funct(vals):
     #print(vals)
     x=vals[0]
     y=vals[1]
-    z=vals[2]
     
-    return x**2+y**2+z**2
+    return -(47+y) * math.sin(abs(y+x/2+47)**(.5)) - x*math.sin(abs(x-(y+47))**(.5))
 
 
 class Particle:
@@ -95,4 +94,4 @@ def enjambre(iterations,num_particles,ls,li,inertia,c1,c2):#Pasamos ls,li ya qur
     
     
 if __name__ == "__main__":  
-    enjambre(100,200,[100,100,100],[-100,-100,-100],.8,.7,.1)
+    enjambre(2000,500,[512,512],[-512,-512],.8,.7,.1)
