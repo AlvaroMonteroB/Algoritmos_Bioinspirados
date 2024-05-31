@@ -87,11 +87,12 @@ def enjambre(iterations,num_particles,ls,li,inertia,c1,c2):#Pasamos ls,li ya qur
             if obj_funct(particle.pos)<obj_funct(xpbest):
                 xpbest=particle.pos.copy()
     
-    print(obj_funct(xpbest)) 
-    print(xpbest)
+    #print(obj_funct(xpbest)) 
+    #print(xpbest)
+    return xpbest,obj_funct(xpbest)
     
     
     
     
 if __name__ == "__main__":  
-    enjambre(2000,500,[512,512],[-512,-512],.8,.7,.1)
+    enjambre(2000,500,[512,512],[-512,-512],.8,.7,.4)
