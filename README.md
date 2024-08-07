@@ -1,5 +1,6 @@
-Prácticas y proyectos de la materia de Algoritmos Bioinspirados y Tópicos selectos de Algoritmos Bioinspirados
-El proyecto principal de este repositorio es una simulación de conducción autónoma usando Algoritmos genéticos en unity
+Prácticas y proyectos de la materia de Algoritmos Bioinspirados y Tópicos selectos de Algoritmos Bioinspirados.
+
+El proyecto principal de este repositorio es una simulación de conducción autónoma usando Algoritmos genéticos en unity.
 A continuación una muestra de como funciona.
 
 Primero el algortimo genera un conjunto de soluciones aleatorio en donde puede que se encuentre la solución o no.
